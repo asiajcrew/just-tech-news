@@ -1,6 +1,7 @@
 const router= require('express').Router();
-const { User }= require('../../models');
+const { User, Post, Vote }= require('../../models');
 
+// GET all users
 router.get('/', (req, res) => {
     User.findAll({
         // attributes: { exclude: ['password'] }
@@ -12,9 +13,22 @@ router.get('/', (req, res) => {
     });
 });
 
+// GET a specific user
 router.get('/:id', (req, res) => {
     User.findOne({
-        attributes: { exclude: ['password'] },
+        // attributes: { exclude: ['password'] },
+        include: [
+            {
+                model: Post,
+                attributes: ['id','title', 'post_url', 'created_at']
+            },
+            {
+                model: Post,
+                attributes: ['title'],
+                through: Vote,
+                as: 'voted_posts'
+            }
+        ],
         where: {
             id: req.params.id
         }
@@ -32,6 +46,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// create a new user
 router.post('/', (req, res) => {
     User.create({
         username: req.body.username,
@@ -85,6 +100,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
+// delete a user
 router.delete('/:id', (req, res) => {
     User.destroy({
         where: {

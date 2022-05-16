@@ -1,13 +1,12 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
-const bcrypt= require('bcrypt');
+// const bcrypt= require('bcrypt');
 
 // create our User model
-class User extends Model {
-  checkPassword(loginPw) {
-    return bcrypt.compareSync(loginPw, this.password);
-  }
-}
+class User extends Model {}
+  // checkPassword(loginPw) {
+  //   return bcrypt.compareSync(loginPw, this.password);
+  // }
 
 // define table columns and configuration
 User.init(
@@ -39,18 +38,18 @@ User.init(
       }
     }
   },
-  {
-    hooks: {
-      async beforeCreate(newUserData) {
-        newUserData.password= await bcrypt.hash(newUserData.password, 10);
-        return newUserData;
-      },
-      async beforeUpdate(updatedUserData) {
-        updatedUserData.password= await bcrypt.hash(updatedUserData.password, 10);
-        return updatedUserData;
-      }
-    },
-    sequelize,
+  // {
+  //   hooks: {
+  //     async beforeCreate(newUserData) {
+  //       newUserData.password= await bcrypt.hash(newUserData.password, 10);
+  //       return newUserData;
+  //     },
+  //     async beforeUpdate(updatedUserData) {
+  //       updatedUserData.password= await bcrypt.hash(updatedUserData.password, 10);
+  //       return updatedUserData;
+  //     }
+    // },
+  {  sequelize,
     // don't automatically create createdAt/updatedAt timestamp fields
     timestamps: false,
     // don't pluralize name of database table
